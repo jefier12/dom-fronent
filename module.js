@@ -132,3 +132,43 @@ export const validarFormulario = (e) => {
       event.preventDefault();
     }
   }; 
+
+  // module.js
+
+export function validarCampoLetras(inputName, mensajeError) {
+  const formulario = document.querySelector("form");
+  const input = document.querySelector(`input[name="${inputName}"]`);
+
+  if (!formulario || !input) return;
+
+  formulario.addEventListener("submit", (e) => {
+    e.preventDefault();
+    input.classList.remove("input_error");
+
+    const anterior = input.parentElement.querySelector(".span_error");
+    if (anterior) anterior.remove();
+
+    if (input.value.trim() === "") {
+      input.classList.add("input_error");
+      const span = document.createElement("span");
+      span.classList.add("span_error");
+      span.textContent = mensajeError;
+      input.insertAdjacentElement("afterend", span);
+    } else {
+      console.log(`Campo ${inputName} válido:`, input.value);
+    }
+  });
+
+  input.addEventListener("keydown", (e) => {
+    const letra = e.key;
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/.test(letra) && letra !== "Backspace") {
+      e.preventDefault();
+    }
+  });
+
+  input.addEventListener("blur", () => {
+    input.classList.remove("input_error");
+    const span = input.parentElement.querySelector(".span_error");
+    if (span) span.remove();
+  });
+}
